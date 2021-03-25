@@ -1,0 +1,5 @@
+#compdef j
+_files -W $DEV_HOME -/
+_files -W $GOPATH/src/github.com -/
+
+# See further documentation in `functions/j`.

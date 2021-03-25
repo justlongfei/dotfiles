@@ -1,0 +1,9 @@
+# dev home for all my code.
+export DEV_HOME=~/dev
+export DOTFILE=~/.dotfiles
+
+# some private settings.
+if [[ -a ~/.localrc ]]
+then
+  source ~/.localrc
+fi
