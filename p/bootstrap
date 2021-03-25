@@ -111,10 +111,12 @@ link_file() {
   if [ "$skip" != "true" ]; then # "false" or empty
     ln -s "${src}" "${dst}"
     success "linked ${src} to ${dst}"
+  else
+    info "Skipped link: ${dst} --> ${src}"
   fi
 }
 
-install_dotfiles() {
+link_dotfiles() {
   info 'installing dotfiles'
 
   local overwrite_all=false backup_all=false skip_all=false
@@ -122,10 +124,10 @@ install_dotfiles() {
   while IFS= read -r -d '' src; do
     dst="$HOME/.$(basename "${src%.*}")"
     link_file "${src}" "${dst}"
-  done < <(find -H "${DOTFILES_ROOT}" -maxdepth 2 -name '*.symlink' -not -path '*.git*')
+  done <  <(find -H "${DOTFILES_ROOT}" -maxdepth 2 -name '*.symlink' -not -path '*.git*')
 }
 
-install_proj() {
+link_proj() {
   info "link this project to ${HOME}/.dotfiles"
   local overwrite_all=false backup_all=false skip_all=false
   link_file "${DOTFILES_ROOT}" "${HOME}"/.dotfiles
@@ -163,8 +165,8 @@ install_dep() {
 }
 
 [ -z "$CI" ] && setup_gitconfig
-install_proj
-install_dotfiles
+link_proj
+link_dotfiles
 install_dep
 
 echo ''
