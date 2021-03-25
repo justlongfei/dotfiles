@@ -51,14 +51,16 @@ link_file () {
   local overwrite= backup= skip=
   local action=
 
-  # 如果文件存在，根据需要进行备份
-  if [ -f "$dst" -o -d "$dst" -o -L "$dst" ]; then 
+  # 检查dst是否是文件，目录，链接？
+  if [ -f ${dst} -o -d ${dst} -o -L ${dst} ]; then 
+    # 如果文件存在，根据需要进行备份
     if [ "$overwrite_all" == "false" ] && [ "$backup_all" == "false" ] && [ "$skip_all" == "false" ]; then
-      local currentSrc="$(readlink $dst)"
-      if [ "$currentSrc" == "$src" ]; then
+      local currentSrc="$(readlink ${dst})"
+      if [ "$currentSrc" == "${src}" ]; then
+        # 跳过已经link好的
         skip=true;
       else
-        user "File already exists: $dst ($(basename "$src")), what do you want to do?\n\
+        user "File already exists: ${dst} ($(basename "${src}")), what do you want to do?\n\
         [s]kip, [S]kip all, [o]verwrite, [O]verwrite all, [b]ackup, [B]ackup all?"
         read -n 1 action
         case "$action" in
@@ -85,24 +87,25 @@ link_file () {
     skip=${skip:-$skip_all}
 
     if [ "$overwrite" == "true" ]; then
-      rm -rf "$dst"
-      success "removed $dst"
+      rm -rf "${dst}"
+      success "removed ${dst}"
     fi
 
     if [ "$backup" == "true" ]; then
-      mv "$dst" "${dst}.backup"
-      success "moved $dst to ${dst}.backup"
+      mv "${dst}" "${dst}.backup"
+      success "moved ${dst} to ${dst}.backup"
     fi
 
     if [ "$skip" == "true" ]; then
-      success "skipped $src"
+      success "skipped ${src}"
     fi
+  else
+    info "File ${dst} not exists, no need to backup"
   fi
 
   if [ "$skip" != "true" ]; then  # "false" or empty
-    echo "aa $src $dst"
-    ln -s "$src" "$dst"
-    success "linked $src to $dst"
+    ln -s "${src}" "${dst}"
+    success "linked ${src} to ${dst}"
   fi
 }
 
@@ -114,24 +117,45 @@ install_dotfiles () {
   for src in $(find -H "$DOTFILES_ROOT" -maxdepth 2 -name '*.symlink' -not -path '*.git*')
   do
     dst="$HOME/.$(basename "${src%.*}")"
-    link_file "$src" "$dst"
+    link_file "${src}" "${dst}"
   done
 }
 
-setup_gitconfig
-overwirte_all=true link_file $DOTFILES_ROOT ~/.dotfiles
-install_dotfiles
+install_proj () {
+  info "link this project to ${HOME}/.dotfiles"
+  local overwrite_all=false backup_all=false skip_all=false
+  link_file $DOTFILES_ROOT $HOME/.dotfiles
+}
 
-# If we're on a Mac, let's install and setup homebrew.
-if [ "$(uname -s)" == "Darwin" ]; then
-  info "installing dependencies"
-  if source bin/dot | while read -r data; do info "$data"; done
-  then
-    success "dependencies installed"
+brewable () {
+  if [ "$(uname -s)" == "Darwin" ]; then
+    # If we're on a Mac, let's install and setup homebrew.
+    info "installing dependencies"
+    if source p/brewable | while read -r data; do info "$data"; done
+    then
+      success "dependencies installed"
+    else
+      fail "error installing dependencies"
+    fi
   else
-    fail "error installing dependencies"
+    info "$(uname -s) not support now"
   fi
-fi
+}
+
+install_dep () {
+  if [ -n "${https_proxy}" -a -n "${http_proxy}" ] || [ -n "${all_proxy}" ]; then
+    # 只有在设置代理的时候才更新brew和安装工具
+    brewable
+  else
+    info "no proxy, skip installing or updating brew"
+  fi
+}
+
+setup_gitconfig
+install_proj
+install_dotfiles
+install_dep
+
 
 echo ''
 echo '  All installed!'
