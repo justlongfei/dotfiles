@@ -12,5 +12,7 @@ p/bootstrap
 
 ## How it works
 
+## CI
+use shellcheck && shellfmt
 ## Credits
 - [Zach Holman](https://github.com/holman/dotfiles) && his article [Dotfiles Are Meant to Be Forked](https://zachholman.com/2010/08/dotfiles-are-meant-to-be-forked/)
