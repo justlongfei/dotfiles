@@ -25,7 +25,7 @@ jobs:
     - name: install app
       run: p/bootstrap
   install-macos11:
-    runs-on: macos-11.0
+    runs-on: macos-11.2
     steps:
     - uses: actions/checkout@v2
     - name: install app
