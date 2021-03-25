@@ -149,7 +149,7 @@ brewable() {
 install_dep() {
   if [ -n "$CI" ]; then
     brewable
-  else 
+  else
     http_proxy=${http_proxy:-}
     https_proxy=${https_proxy:-}
     all_proxy=${all_proxy:-}
