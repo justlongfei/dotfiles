@@ -7,43 +7,38 @@ DOTFILES_ROOT=$(pwd -P)
 
 set -e
 
-echo ''
-
+# 提示信息
 info () {
-  printf "\r  [ \033[00;34m..\033[0m ] $1\n"
+  printf "\r  [ \033[00;34mINFO\033[0m ] $1\n"
 }
 
+# 交互式提示信息
 user () {
-  printf "\r  [ \033[0;33m??\033[0m ] $1\n"
+  printf "\r  [ \033[0;33mUSER\033[0m ] $1\n"
 }
 
+# 成功
 success () {
-  printf "\r\033[2K  [ \033[00;32mOK\033[0m ] $1\n"
+  printf "\r\033[2K  [ \033[00;32mSUCC\033[0m ] $1\n"
 }
 
+# 失败
 fail () {
   printf "\r\033[2K  [\033[0;31mFAIL\033[0m] $1\n"
-  echo ''
-  exit
+  exit 255
 }
 
+# 不同用户的设置不一样
 setup_gitconfig () {
-  if ! [ -f git/gitconfig.local.symlink ]
-  then
+  if ! [ -f git/gitconfig.local.symlink ]; then
     info 'setup gitconfig'
-
-    git_credential='cache'
-    if [ "$(uname -s)" == "Darwin" ]
-    then
-      git_credential='osxkeychain'
-    fi
 
     user ' - What is your github author name?'
     read -e git_authorname
     user ' - What is your github author email?'
     read -e git_authoremail
 
-    sed -e "s/AUTHORNAME/$git_authorname/g" -e "s/AUTHOREMAIL/$git_authoremail/g" -e "s/GIT_CREDENTIAL_HELPER/$git_credential/g" git/gitconfig.local.symlink.example > git/gitconfig.local.symlink
+    sed -e "s/AUTHOR_NAME/$git_authorname/g" -e "s/AUTHOR_EMAIL/$git_authoremail/g" git/gitconfig.local.symlink.template > git/gitconfig.local.symlink
 
     success 'gitconfig'
   fi
@@ -56,25 +51,16 @@ link_file () {
   local overwrite= backup= skip=
   local action=
 
-  if [ -f "$dst" -o -d "$dst" -o -L "$dst" ]
-  then
-
-    if [ "$overwrite_all" == "false" ] && [ "$backup_all" == "false" ] && [ "$skip_all" == "false" ]
-    then
-
+  # 如果文件存在，根据需要进行备份
+  if [ -f "$dst" -o -d "$dst" -o -L "$dst" ]; then 
+    if [ "$overwrite_all" == "false" ] && [ "$backup_all" == "false" ] && [ "$skip_all" == "false" ]; then
       local currentSrc="$(readlink $dst)"
-
-      if [ "$currentSrc" == "$src" ]
-      then
-
+      if [ "$currentSrc" == "$src" ]; then
         skip=true;
-
       else
-
         user "File already exists: $dst ($(basename "$src")), what do you want to do?\n\
         [s]kip, [S]kip all, [o]verwrite, [O]verwrite all, [b]ackup, [B]ackup all?"
         read -n 1 action
-
         case "$action" in
           o )
             overwrite=true;;
@@ -91,37 +77,32 @@ link_file () {
           * )
             ;;
         esac
-
       fi
-
     fi
 
     overwrite=${overwrite:-$overwrite_all}
     backup=${backup:-$backup_all}
     skip=${skip:-$skip_all}
 
-    if [ "$overwrite" == "true" ]
-    then
+    if [ "$overwrite" == "true" ]; then
       rm -rf "$dst"
       success "removed $dst"
     fi
 
-    if [ "$backup" == "true" ]
-    then
+    if [ "$backup" == "true" ]; then
       mv "$dst" "${dst}.backup"
       success "moved $dst to ${dst}.backup"
     fi
 
-    if [ "$skip" == "true" ]
-    then
+    if [ "$skip" == "true" ]; then
       success "skipped $src"
     fi
   fi
 
-  if [ "$skip" != "true" ]  # "false" or empty
-  then
-    ln -s "$1" "$2"
-    success "linked $1 to $2"
+  if [ "$skip" != "true" ]; then  # "false" or empty
+    echo "aa $src $dst"
+    ln -s "$src" "$dst"
+    success "linked $src to $dst"
   fi
 }
 
@@ -138,11 +119,11 @@ install_dotfiles () {
 }
 
 setup_gitconfig
+overwirte_all=true link_file $DOTFILES_ROOT ~/.dotfiles
 install_dotfiles
 
 # If we're on a Mac, let's install and setup homebrew.
-if [ "$(uname -s)" == "Darwin" ]
-then
+if [ "$(uname -s)" == "Darwin" ]; then
   info "installing dependencies"
   if source bin/dot | while read -r data; do info "$data"; done
   then

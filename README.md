@@ -5,8 +5,8 @@
 
 ## Install
 ```bash
-git clone https://github.com/longf2021/dotfiles.git ~/.dotfiles
-cd ~/.dotfiles
+git clone https://github.com/longf2021/dotfiles.git
+cd dotfiles
 p/bootstrap
 ```
 
