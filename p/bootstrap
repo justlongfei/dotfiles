@@ -116,18 +116,20 @@ link_file() {
   fi
 }
 
-link_dotfiles() {
+setup_dotfiles() {
   info 'installing dotfiles'
 
   local overwrite_all=false backup_all=false skip_all=false
 
-  while IFS= read -r -d '' src; do
+  find -H "$DOTFILES_ROOT" -maxdepth 2 -name '*.symlink' -not -path '*.git*' >tmp
+  while IFS= read -r src; do
     dst="$HOME/.$(basename "${src%.*}")"
-    link_file "${src}" "${dst}"
-  done <  <(find -H "${DOTFILES_ROOT}" -maxdepth 2 -name '*.symlink' -not -path '*.git*')
+    link_file "$src" "$dst"
+  done <tmp
+  rm tmp
 }
 
-link_proj() {
+setup_proj() {
   info "link this project to ${HOME}/.dotfiles"
   local overwrite_all=false backup_all=false skip_all=false
   link_file "${DOTFILES_ROOT}" "${HOME}"/.dotfiles
@@ -165,8 +167,8 @@ install_dep() {
 }
 
 [ -z "$CI" ] && setup_gitconfig
-link_proj
-link_dotfiles
+setup_proj
+setup_dotfiles
 install_dep
 
 echo ''
