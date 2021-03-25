@@ -1,4 +1,4 @@
-#!/bin/zsh
+#!/usr/bin/env bash
 #
 # This lets you quickly jump[where j comes] into a project directory.
 #
@@ -13,4 +13,4 @@
 #
 # ...to quickly jump into holman/boom, for example.
 
-cd "$DEV_HOME/$1"
+cd "$DEV_HOME/$1" || exit

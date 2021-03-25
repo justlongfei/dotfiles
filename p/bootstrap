@@ -8,76 +8,81 @@ DOTFILES_ROOT=$(pwd -P)
 set -e
 
 # 提示信息
-info () {
-  printf "\r  [ \033[00;34mINFO\033[0m ] $1\n"
+info() {
+  printf "\r  [ \033[00;34mINFO\033[0m ] %s\n" "$1"
 }
 
 # 交互式提示信息
-user () {
-  printf "\r  [ \033[0;33mUSER\033[0m ] $1\n"
+user() {
+  printf "\r  [ \033[0;33mUSER\033[0m ] %s\n" "$1"
 }
 
 # 成功
-success () {
-  printf "\r\033[2K  [ \033[00;32mSUCC\033[0m ] $1\n"
+success() {
+  printf "\r\033[2K  [ \033[00;32mSUCC\033[0m ] %s\n" "$1"
 }
 
 # 失败
-fail () {
-  printf "\r\033[2K  [\033[0;31mFAIL\033[0m] $1\n"
+fail() {
+  printf "\r\033[2K  [\033[0;31mFAIL\033[0m] %s\n" "$1"
   exit 255
 }
 
 # 不同用户的设置不一样
-setup_gitconfig () {
+setup_gitconfig() {
   if ! [ -f git/gitconfig.local.symlink ]; then
     info 'setup gitconfig'
 
     user ' - What is your github author name?'
-    read -e git_authorname
+    read -er git_authorname
     user ' - What is your github author email?'
-    read -e git_authoremail
+    read -er git_authoremail
 
-    sed -e "s/AUTHOR_NAME/$git_authorname/g" -e "s/AUTHOR_EMAIL/$git_authoremail/g" git/gitconfig.local.symlink.template > git/gitconfig.local.symlink
+    sed -e "s/AUTHOR_NAME/$git_authorname/g" -e "s/AUTHOR_EMAIL/$git_authoremail/g" git/gitconfig.local.symlink.template >git/gitconfig.local.symlink
 
     success 'gitconfig'
   fi
 }
 
-
-link_file () {
+link_file() {
   local src=$1 dst=$2
 
-  local overwrite= backup= skip=
-  local action=
+  local overwrite="false" backup="false" skip="false"
+  local action=""
 
   # 检查dst是否是文件，目录，链接？
-  if [ -f ${dst} -o -d ${dst} -o -L ${dst} ]; then 
+  if [ -f "${dst}" ] || [ -d "${dst}" ] || [ -L "${dst}" ]; then
     # 如果文件存在，根据需要进行备份
     if [ "$overwrite_all" == "false" ] && [ "$backup_all" == "false" ] && [ "$skip_all" == "false" ]; then
-      local currentSrc="$(readlink ${dst})"
+      currentSrc="$(readlink "${dst}")"
       if [ "$currentSrc" == "${src}" ]; then
         # 跳过已经link好的
-        skip=true;
+        skip=true
       else
         user "File already exists: ${dst} ($(basename "${src}")), what do you want to do?\n\
         [s]kip, [S]kip all, [o]verwrite, [O]verwrite all, [b]ackup, [B]ackup all?"
-        read -n 1 action
+        read -nr 1 action
         case "$action" in
-          o )
-            overwrite=true;;
-          O )
-            overwrite_all=true;;
-          b )
-            backup=true;;
-          B )
-            backup_all=true;;
-          s )
-            skip=true;;
-          S )
-            skip_all=true;;
-          * )
-            ;;
+        o)
+          overwrite=true
+          ;;
+        O)
+          overwrite_all=true
+          ;;
+        b)
+          backup=true
+          ;;
+        B)
+          backup_all=true
+          ;;
+        s)
+          skip=true
+          ;;
+        S)
+          skip_all=true
+          ;;
+        *) ;;
+
         esac
       fi
     fi
@@ -103,36 +108,35 @@ link_file () {
     info "File ${dst} not exists, no need to backup"
   fi
 
-  if [ "$skip" != "true" ]; then  # "false" or empty
+  if [ "$skip" != "true" ]; then # "false" or empty
     ln -s "${src}" "${dst}"
     success "linked ${src} to ${dst}"
   fi
 }
 
-install_dotfiles () {
+install_dotfiles() {
   info 'installing dotfiles'
 
   local overwrite_all=false backup_all=false skip_all=false
 
-  for src in $(find -H "$DOTFILES_ROOT" -maxdepth 2 -name '*.symlink' -not -path '*.git*')
-  do
+  while IFS= read -r -d '' src; do
     dst="$HOME/.$(basename "${src%.*}")"
     link_file "${src}" "${dst}"
-  done
+  done < <(find -H "${DOTFILES_ROOT}" -maxdepth 2 -name '*.symlink' -not -path '*.git*')
 }
 
-install_proj () {
+install_proj() {
   info "link this project to ${HOME}/.dotfiles"
   local overwrite_all=false backup_all=false skip_all=false
-  link_file $DOTFILES_ROOT $HOME/.dotfiles
+  link_file "${DOTFILES_ROOT}" "${HOME}"/.dotfiles
 }
 
-brewable () {
+brewable() {
   if [ "$(uname -s)" == "Darwin" ]; then
     # If we're on a Mac, let's install and setup homebrew.
     info "installing dependencies"
-    if source p/brewable | while read -r data; do info "$data"; done
-    then
+    # shellcheck disable=SC1091
+    if source p/brewable | while read -r data; do info "$data"; done; then
       success "dependencies installed"
     else
       fail "error installing dependencies"
@@ -142,8 +146,11 @@ brewable () {
   fi
 }
 
-install_dep () {
-  if [ -n "${https_proxy}" -a -n "${http_proxy}" ] || [ -n "${all_proxy}" ]; then
+install_dep() {
+  http_proxy=${http_proxy:-}
+  https_proxy=${https_proxy:-}
+  all_proxy=${all_proxy:-}
+  if [ -n "${https_proxy}" ] && [ -n "${http_proxy}" ] || [ -n "${all_proxy}" ]; then
     # 只有在设置代理的时候才更新brew和安装工具
     brewable
   else
@@ -155,7 +162,6 @@ setup_gitconfig
 install_proj
 install_dotfiles
 install_dep
-
 
 echo ''
 echo '  All installed!'
