@@ -147,18 +147,22 @@ brewable() {
 }
 
 install_dep() {
-  http_proxy=${http_proxy:-}
-  https_proxy=${https_proxy:-}
-  all_proxy=${all_proxy:-}
-  if [ -n "${https_proxy}" ] && [ -n "${http_proxy}" ] || [ -n "${all_proxy}" ]; then
-    # 只有在设置代理的时候才更新brew和安装工具
+  if [ -n "$CI" ]; then
     brewable
-  else
-    info "no proxy, skip installing or updating brew"
+  else 
+    http_proxy=${http_proxy:-}
+    https_proxy=${https_proxy:-}
+    all_proxy=${all_proxy:-}
+    if [ -n "${https_proxy}" ] && [ -n "${http_proxy}" ] || [ -n "${all_proxy}" ]; then
+      # 只有在设置代理的时候才更新brew和安装工具
+      brewable
+    else
+      info "no proxy, skip installing or updating brew"
+    fi
   fi
 }
 
-setup_gitconfig
+[ -z "$CI" ] && setup_gitconfig
 install_proj
 install_dotfiles
 install_dep
