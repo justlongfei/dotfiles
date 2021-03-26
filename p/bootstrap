@@ -101,9 +101,6 @@ link_file() {
       success "moved ${dst} to ${dst}.backup"
     fi
 
-    if [ "$skip" == "true" ]; then
-      success "skipped ${src}"
-    fi
   else
     info "File ${dst} not exists, no need to backup"
   fi
@@ -112,7 +109,7 @@ link_file() {
     ln -s "${src}" "${dst}"
     success "linked ${src} to ${dst}"
   else
-    info "Skipped link: ${dst} --> ${src}"
+    success "skipped ${src}"
   fi
 }
 
@@ -151,18 +148,16 @@ brewable() {
 }
 
 install_dep() {
+  http_proxy=${http_proxy:-}
+  https_proxy=${https_proxy:-}
+  all_proxy=${all_proxy:-}
   if [ -n "$CI" ]; then
     brewable
+  elif [ -n "${https_proxy}" ] && [ -n "${http_proxy}" ] || [ -n "${all_proxy}" ]; then
+    # 只有在设置代理的时候才更新brew和安装工具
+    brewable
   else
-    http_proxy=${http_proxy:-}
-    https_proxy=${https_proxy:-}
-    all_proxy=${all_proxy:-}
-    if [ -n "${https_proxy}" ] && [ -n "${http_proxy}" ] || [ -n "${all_proxy}" ]; then
-      # 只有在设置代理的时候才更新brew和安装工具
-      brewable
-    else
-      info "no proxy, skip installing or updating brew"
-    fi
+    info "no proxy, skip installing or updating brew"
   fi
 }
 
