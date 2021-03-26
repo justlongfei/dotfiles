@@ -13,7 +13,7 @@ function download {
 
 function check_image {
   echo "checking $1:$2..."
-  [[ -z $(docker images $1:$2|grep $2) ]] && download $1 $2
+  [[ -z $(docker images $1:$2 | grep $2) ]] && download $1 $2
 }
 
 function get_container_name {
@@ -41,11 +41,11 @@ function get_container_name {
 }
 
 function is_started {
-  [[ -z $(docker ps -a|grep $1) ]] || echo "started"
+  [[ -z $(docker ps -a | grep $1) ]] || echo "started"
 }
 
 function is_running {
-  [[ -z $(docker ps |grep $1) ]] || echo "running"
+  [[ -z $(docker ps | grep $1) ]] || echo "running"
 }
 
 function status {
@@ -100,8 +100,7 @@ function conn {
 
 function choose_typ {
   echo "choose database"
-  select typ in "mysql" "mariadb"
-  do
+  select typ in "mysql" "mariadb"; do
     case $typ in
       "mysql")
         break
@@ -119,8 +118,7 @@ function choose_typ {
 
 function choose_action {
   echo "choose action"
-  select action in "start" "stop" "connect" "status"
-  do
+  select action in "start" "stop" "connect" "status"; do
     case $action in
       "start")
         break
@@ -132,7 +130,7 @@ function choose_action {
         break
         ;;
       "status")
-        break;
+        break
         ;;
       *)
         error "wrong choice."
@@ -145,23 +143,22 @@ function choose_action {
 function choose_version {
   echo "choose version"
   # not support patch version
-  select version in "5.7" "8.0" "10.3" "10.4" "10.5"
-  do
+  select version in "5.7" "8.0" "10.3" "10.4" "10.5"; do
     case $version in
       "5.7")
         break
-        ;; 
+        ;;
       "8.0")
         break
         ;;
       "10.3")
-        break;
+        break
         ;;
       "10.4")
-        break;
+        break
         ;;
       "10.5")
-        break;
+        break
         ;;
       *)
         error "wrong choice."

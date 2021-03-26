@@ -11,8 +11,29 @@ export DOTFILES=$HOME/.dotfiles
 "$DOTFILES"/homebrew/install >/dev/null 2>&1
 
 # Upgrade homebrew
-echo "› brew update"
-brew update >/dev/null 2>&1
+if [ -n "$CI" ]; then
+  echo "› brew update"
+  brew update >/dev/null 2>&1
+else
+  should_go_on="true"
+  while [ "$should_go_on" = "true" ]; do
+    read -r -p "do you want update brew?[y/N] " -n 1 choice
+    case "$choice" in
+      "y" | "Y")
+        echo "› brew update"
+        brew update >/dev/null 2>&1
+        should_go_on="false"
+        ;;
+      "n" | "N")
+        echo "› skip update homebrew"
+        should_go_on="false"
+        ;;
+      *)
+        echo "› invalid input, please input again.[y/N] "
+        ;;
+    esac
+  done
+fi
 
 # Install software
 echo "› exec $DOTFILES/p/install"

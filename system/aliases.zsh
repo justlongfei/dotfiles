@@ -13,4 +13,4 @@ alias ..="cd .."
 alias ...="cd ../.."
 alias ....="cd ../../.."
 
-alias reload="source ~/.zshrc"
+alias r!="echo 'reload zsh config' && source ~/.zshrc"

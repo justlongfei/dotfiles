@@ -9,22 +9,22 @@ set -e
 
 # 提示信息
 info() {
-  printf "\r  [ \033[00;34mINFO\033[0m ] %s\n" "$1"
+  printf "\r  [ \033[00;34mINFO\033[0m ] %b\n" "$1"
 }
 
 # 交互式提示信息
 user() {
-  printf "\r  [ \033[0;33mUSER\033[0m ] %s\n" "$1"
+  printf "\r  [ \033[0;33mUSER\033[0m ] %b\n" "$1"
 }
 
 # 成功
 success() {
-  printf "\r\033[2K  [ \033[00;32mSUCC\033[0m ] %s\n" "$1"
+  printf "\r\033[2K  [ \033[00;32mSUCC\033[0m ] %b\n" "$1"
 }
 
 # 失败
 fail() {
-  printf "\r\033[2K  [\033[0;31mFAIL\033[0m] %s\n" "$1"
+  printf "\r\033[2K  [\033[0;31mFAIL\033[0m] %b\n" "$1"
   exit 255
 }
 
@@ -54,14 +54,18 @@ link_file() {
   if [ -f "${dst}" ] || [ -d "${dst}" ] || [ -L "${dst}" ]; then
     # 如果文件存在，根据需要进行备份
     if [ "$overwrite_all" == "false" ] && [ "$backup_all" == "false" ] && [ "$skip_all" == "false" ]; then
-      currentSrc="$(readlink "${dst}")"
-      if [ "$currentSrc" == "${src}" ]; then
+      local real_src=""
+      if [ -L "$dst" ]; then
+        real_src="$(readlink "${dst}")"
+      fi
+      if [ "$real_src" == "${src}" ]; then
         # 跳过已经link好的
         skip=true
       else
         user "File already exists: ${dst} ($(basename "${src}")), what do you want to do?\n\
-        [s]kip, [S]kip all, [o]verwrite, [O]verwrite all, [b]ackup, [B]ackup all?"
-        read -nr 1 action
+            [s]kip, [S]kip all, [o]verwrite, [O]verwrite all, [b]ackup, [B]ackup all?"
+
+        read -r -p "so what your choice? " -n 1 action
         case "$action" in
           o)
             overwrite=true
@@ -82,7 +86,6 @@ link_file() {
             skip_all=true
             ;;
           *) ;;
-
         esac
       fi
     fi
@@ -113,16 +116,21 @@ link_file() {
   fi
 }
 
+# Creating a link at home directory.
+ct_link_at_home() {
+  local src=$1
+  local overwrite_all=false backup_all=false skip_all=false
+  dst="$HOME/.$(basename "${src%.*}")"
+  link_file "$src" "$dst"
+}
+
 setup_dotfiles() {
   info 'installing dotfiles'
 
-  local overwrite_all=false backup_all=false skip_all=false
-
-  find -H "$DOTFILES_ROOT" -maxdepth 2 -name '*.symlink' -not -path '*.git*' >tmp
-  while IFS= read -r src; do
-    dst="$HOME/.$(basename "${src%.*}")"
-    link_file "$src" "$dst"
-  done <tmp
+  find -H "$DOTFILES_ROOT" -maxdepth 4 -name '*.symlink' -not -path '*.git*' >tmp
+  while IFS= read -r -u 3 file; do
+    ct_link_at_home "$file"
+  done 3<tmp
   rm tmp
 }
 
@@ -135,7 +143,7 @@ setup_proj() {
 brewable() {
   if [ "$(uname -s)" == "Darwin" ]; then
     # If we're on a Mac, let's install and setup homebrew.
-    info "installing dependencies"
+    info "› exec p/brewable"
     # shellcheck disable=SC1091
     if source p/brewable | while read -r data; do info "$data"; done; then
       success "dependencies installed"
@@ -148,6 +156,7 @@ brewable() {
 }
 
 install_dep() {
+  info "installing dependencies"
   http_proxy=${http_proxy:-}
   https_proxy=${https_proxy:-}
   all_proxy=${all_proxy:-}
@@ -167,4 +176,4 @@ setup_dotfiles
 install_dep
 
 echo ''
-echo '  All installed!'
+echo '› All installed!'

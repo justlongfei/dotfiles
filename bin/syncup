@@ -12,29 +12,28 @@ myexit() {
   exit 1
 }
 
-
 # default "`pwd`"
 repo_path=$1
-[ -z ${repo_path} ] && repo_path=`pwd`
+[ -z ${repo_path} ] && repo_path=$(pwd)
 [ -d $repo_path ] || myexit "First parameter is not directory"
 # default "current branch"
 branch=$2
-if [[ -z $branch ]]; then 
-  branch=`git rev-parse --abbrev-ref HEAD`
+if [[ -z $branch ]]; then
+  branch=$(git rev-parse --abbrev-ref HEAD)
 fi
 # checks if it's a git repo
 check_repo() {
-  if [ ! -d `pwd`/.git ]; then
-    myexit "`pwd` is not a git repo"
-  fi 
+  if [ ! -d $(pwd)/.git ]; then
+    myexit "$(pwd) is not a git repo"
+  fi
 }
 
 # checks if there is a remote repo called upstream
 check_upstream() {
-  git remote -v | grep -w upstream > /dev/null
+  git remote -v | grep -w upstream >/dev/null
   # if there are no remote repository called upstream
   if [ $? -ne 0 ]; then
-    myexit "Upstream not configured in this repo(`pwd`)"
+    myexit "Upstream not configured in this repo($(pwd))"
   fi
 }
 
@@ -62,7 +61,7 @@ sync() {
   fi
 }
 
-cur_path=`pwd`
+cur_path=$(pwd)
 cd $repo_path
 check_repo
 check_upstream

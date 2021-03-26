@@ -8,7 +8,7 @@ fi
 # dev home for all my code.
 export DEV_HOME=~/dev
 export DOTFILES=~/.dotfiles
-export BREW_PREFIX=$(brew --prefix)
+export HOMEBREW_PREFIX=$(brew --prefix)
 
 # some private settings.
 if [[ -a ~/.localrc ]]
@@ -49,7 +49,12 @@ do
 done
 
 unset config_files
-source "$BREW_PREFIX"/opt/powerlevel10k/powerlevel10k.zsh-theme
+
+# source zsh plugin
+source "${HOMEBREW_PREFIX}"/opt/powerlevel10k/powerlevel10k.zsh-theme
+source "${HOMEBREW_PREFIX}"/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+source "${HOMEBREW_PREFIX}"/opt/zsh-autosuggestions/zsh-autosuggestions.zsh
+
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
