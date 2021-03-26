@@ -12,7 +12,7 @@ alias gcmsg='git commit -m'
 
 alias gd='git diff'
 
-alias gpsup='git push --set-upstream origin $(git_current_branch)'
+alias gpsup='git push --set-upstream origin $(git rev-parse --abbrev-ref HEAD)'
 
 alias gl='git pull'
 alias glog='git log --oneline --decorate --graph'
