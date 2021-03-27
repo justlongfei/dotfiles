@@ -19,3 +19,5 @@ alias ...="cd ../.."
 alias ....="cd ../../.."
 
 alias r!="echo 'reload zsh config' && source ~/.zshrc"
+alias cls='clear' # Good 'ol Clear Screen command
+alias pubkey="more ~/.ssh/id_rsa.pub | pbcopy | echo '=> Public key copied to pasteboard.'"
