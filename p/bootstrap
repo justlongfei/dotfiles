@@ -44,10 +44,12 @@ setup_gitconfig() {
   fi
 }
 
+# TODO refactor
 link_file() {
   local src=$1 dst=$2
 
   local overwrite="false" backup="false" skip="false"
+  [ -n "$CI" ] && overwrite="true" && overwrite_all="true"
   local action=""
 
   # 检查dst是否是文件，目录，链接？
@@ -119,7 +121,7 @@ link_file() {
 # Creating a link at home directory.
 ct_link_at_home() {
   local src=$1
-  local overwrite_all=false backup_all=false skip_all=false
+  local overwrite_all="false" backup_all="false" skip_all="false"
   dst="$HOME/.$(basename "${src%.*}")"
   link_file "$src" "$dst"
 }
@@ -136,8 +138,7 @@ setup_dotfiles() {
 
 setup_proj() {
   info "link this project to ${HOME}/.dotfiles"
-  local overwrite_all=false backup_all=false skip_all=false
-  link_file "${DOTFILES_ROOT}" "${HOME}"/.dotfiles
+  ct_link_at_home "${DOTFILES_ROOT}"
 }
 
 brewable() {
@@ -170,7 +171,7 @@ install_dep() {
   fi
 }
 
-[ -z "$CI" ] && setup_gitconfig
+[ -n "$CI" ] || setup_gitconfig # skip set personal config in ci
 setup_proj
 setup_dotfiles
 install_dep

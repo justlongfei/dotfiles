@@ -1,23 +1,23 @@
 #!/bin/bash
-function error {
-  echo $1
+function error() {
+  echo "$1"
   exit 1
 }
 
-function download {
-  name=$1
-  tag=$2
-  echo "docker pull $name:$tag"
-  docker pull $name:$tag
+function download() {
+  echo "docker pull $1:$2"
+  docker pull "$1":"$2"
 }
 
-function check_image {
+function check_image() {
   echo "checking $1:$2..."
-  [[ -z $(docker images $1:$2 | grep $2) ]] && download $1 $2
+  if ! docker images "$1":"$2" | grep "$2"; then
+    download "$1" "$2"
+  fi
 }
 
-function get_container_name {
-  case $1 in
+function get_container_name() {
+  case "$1" in
     "5.7")
       name="mysql5x7"
       ;;
@@ -37,48 +37,48 @@ function get_container_name {
       error "wrong version."
       ;;
   esac
-  echo $name
+  echo "$name"
 }
 
-function is_started {
-  [[ -z $(docker ps -a | grep $1) ]] || echo "started"
+function is_started() {
+  docker ps -a | grep "$1" || echo "started"
 }
 
-function is_running {
-  [[ -z $(docker ps | grep $1) ]] || echo "running"
+function is_running() {
+  docker ps | grep "$1" || echo "running"
 }
 
-function status {
-  name=$(get_container_name $1)
-  running=$(is_running $name)
+function status() {
+  name=$(get_container_name "$1")
+  running=$(is_running "$name")
   [[ -n $running ]] && echo "$name: Running" || echo "$name: Stopped"
 }
 
-function start {
+function start() {
   # two image may have same tag
-  image_name=$1
-  tag=$2
-  container_name=$(get_container_name $tag)
-  running=$(is_running $container_name)
+  image_name="$1"
+  tag="$2"
+  container_name=$(get_container_name "$tag")
+  running=$(is_running "$container_name")
   [[ -n $running ]] && error "$container_name is already running."
-  started=$(is_started $container_name)
+  started=$(is_started "$container_name")
   if [[ -n $started ]]; then
-    docker start $container_name
+    docker start "$container_name"
   else
-    docker run --name $container_name -e MYSQL_ROOT_PASSWORD=123456 -d $image_name:$tag
+    docker run --name "$container_name" -e MYSQL_ROOT_PASSWORD=123456 -d "$image_name":"$tag"
   fi
 }
 
-function stop {
-  name=$(get_container_name $1)
-  running=$(is_running $name)
+function stop() {
+  name=$(get_container_name "$1")
+  running=$(is_running "$name")
   if [[ -n $running ]]; then
-    docker stop $name
+    docker stop "$name"
   else
     echo "$name is not running."
     exit 0
   fi
-  running=$(is_running $name)
+  running=$(is_running "$name")
   sleep 0.5
   if [[ -n $running ]]; then
     echo "failed to stop $name, stop it manually."
@@ -88,9 +88,9 @@ function stop {
   fi
 }
 
-function conn {
-  name=$(get_container_name $1)
-  running=$(is_running $name)
+function conn() {
+  name=$(get_container_name "$1")
+  running=$(is_running "$name")
   if [[ -z $running ]]; then
     error "$name is not running."
   else
@@ -98,10 +98,10 @@ function conn {
   fi
 }
 
-function choose_typ {
+function choose_typ() {
   echo "choose database"
   select typ in "mysql" "mariadb"; do
-    case $typ in
+    case "$typ" in
       "mysql")
         break
         ;;
@@ -116,7 +116,7 @@ function choose_typ {
   echo "$typ is chooosed."
 }
 
-function choose_action {
+function choose_action() {
   echo "choose action"
   select action in "start" "stop" "connect" "status"; do
     case $action in
@@ -140,11 +140,11 @@ function choose_action {
   echo "action $action is chooosed."
 }
 
-function choose_version {
+function choose_version() {
   echo "choose version"
   # not support patch version
   select version in "5.7" "8.0" "10.3" "10.4" "10.5"; do
-    case $version in
+    case "$version" in
       "5.7")
         break
         ;;
@@ -168,31 +168,31 @@ function choose_version {
   done
 }
 
-function main {
+function main() {
   [[ -z $(command -v docker) ]] && error "no docker."
 
-  action=$1
+  action="$1"
   # support mysql mairadb
   # maybe support percona oracle db2 sqlserver
-  typ=$2
+  typ="$2"
   version=$3
-  [[ -z $typ ]] && choose_typ
+  [[ -z "$typ" ]] && choose_typ
   [[ -z $action ]] && choose_action
-  [[ -z $version ]] && choose_version
+  [[ -z "$version" ]] && choose_version
 
   case $action in
     "start")
-      check_image $typ $version
-      start $typ $version
+      check_image "$typ" "$version"
+      start "$typ" "$version"
       ;;
     "stop")
-      stop $version
+      stop "$version"
       ;;
     "connect")
-      conn $version
+      conn "$version"
       ;;
     "status")
-      status $version
+      status "$version"
       ;;
     *)
       error "wrong action."
@@ -200,4 +200,4 @@ function main {
   esac
 }
 
-main $@
+main "$@"
