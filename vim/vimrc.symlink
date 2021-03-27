@@ -1,11 +1,29 @@
-" line number
-set number
-" no swap files
-set noswapfile
-" no backup
-set nobackup
-
-syntax on
-" Wrap gitcommit file types at the appropriate length
+" set linebreak
+" set wrap
 filetype indent plugin on
-
+set  ruler
+set autoindent
+set encoding=utf-8
+set expandtab
+set hlsearch
+set ignorecase
+set incsearch
+set list
+set listchars=tab:»■,trail:■
+set nobackup
+set noswapfile
+set nowrap
+set number
+set relativenumber
+set shiftwidth=2
+set showcmd
+set showmatch
+set showmode
+set smartcase
+set softtabstop=2
+set t_Co=256
+set tabstop=2
+set textwidth=120
+set wildmenu
+set wildmode=longest:list,full
+syntax on
