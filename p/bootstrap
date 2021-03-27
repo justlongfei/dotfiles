@@ -121,7 +121,6 @@ link_file() {
 # Creating a link at home directory.
 ct_link_at_home() {
   local src=$1
-  local overwrite_all="false" backup_all="false" skip_all="false"
   dst="$HOME/.$(basename "${src%.*}")"
   link_file "$src" "$dst"
 }
@@ -129,6 +128,7 @@ ct_link_at_home() {
 setup_dotfiles() {
   info 'installing dotfiles'
 
+  local overwrite_all="false" backup_all="false" skip_all="false"
   find -H "$DOTFILES_ROOT" -maxdepth 4 -name '*.symlink' -not -path '*.git*' >tmp
   while IFS= read -r -u 3 file; do
     ct_link_at_home "$file"
@@ -138,7 +138,10 @@ setup_dotfiles() {
 
 setup_proj() {
   info "link this project to ${HOME}/.dotfiles"
+
+  local overwrite_all="false" backup_all="false" skip_all="false"
   ct_link_at_home "${DOTFILES_ROOT}"
+  export DOTFILES=$HOME/.dotfiles
 }
 
 brewable() {

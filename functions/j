@@ -13,4 +13,4 @@
 #
 # ...to quickly jump into holman/boom, for example.
 
-cd "$DEV_HOME/$1" || exit
+cd "$DEV_HOME/$1" || return 1
