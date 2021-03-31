@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+#
+# This lets you quickly jump[where j comes] into a project directory.
+#
+# Type:
+#
+#   j <tab>
+#
+# ...to autocomplete on all of your projects in the directories specified in
+# `functions/_j`. Typically I'm using it like:
+#
+#    j holm<tab>/bo<tab>
+#
+# ...to quickly jump into holman/boom, for example.
+
+cd "$DEV_HOME/$1" || return 1

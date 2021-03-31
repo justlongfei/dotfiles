@@ -1,0 +1,34 @@
+name: CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+  workflow_dispatch:
+
+jobs:
+  sh-checker:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Run the sh-checker
+      uses: luizm/action-sh-checker@v0.1.13
+      env:
+        SHELLCHECK_OPTS: -e SC2148
+        SHFMT_OPTS: -i 2 -ci
+        
+  install-macos:
+    runs-on: macos-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: install app
+      run: p/bootstrap
+      
+  install-ubuntu:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: install app
+      run: p/bootstrap

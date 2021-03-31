@@ -1,0 +1,183 @@
+#!/usr/bin/env bash
+#
+# bootstrap installs things.
+
+cd "$(dirname "$0")/.."
+DOTFILES_ROOT=$(pwd -P)
+
+set -e
+
+# 提示信息
+info() {
+  printf "\r  [ \033[00;34mINFO\033[0m ] %b\n" "$1"
+}
+
+# 交互式提示信息
+user() {
+  printf "\r  [ \033[0;33mUSER\033[0m ] %b\n" "$1"
+}
+
+# 成功
+success() {
+  printf "\r\033[2K  [ \033[00;32mSUCC\033[0m ] %b\n" "$1"
+}
+
+# 失败
+fail() {
+  printf "\r\033[2K  [\033[0;31mFAIL\033[0m] %b\n" "$1"
+  exit 255
+}
+
+# 不同用户的设置不一样
+setup_gitconfig() {
+  if ! [ -f git/gitconfig.local.symlink ]; then
+    info 'setup gitconfig'
+
+    user ' - What is your github author name?'
+    read -er git_authorname
+    user ' - What is your github author email?'
+    read -er git_authoremail
+
+    sed -e "s/AUTHOR_NAME/$git_authorname/g" -e "s/AUTHOR_EMAIL/$git_authoremail/g" git/gitconfig.local.symlink.template >git/gitconfig.local.symlink
+
+    success 'gitconfig'
+  fi
+}
+
+# TODO refactor
+link_file() {
+  local src=$1 dst=$2
+
+  local overwrite="false" backup="false" skip="false"
+  [ -n "$CI" ] && overwrite="true" && overwrite_all="true"
+  local action=""
+
+  # 检查dst是否是文件，目录，链接？
+  if [ -f "${dst}" ] || [ -d "${dst}" ] || [ -L "${dst}" ]; then
+    # 如果文件存在，根据需要进行备份
+    if [ "$overwrite_all" == "false" ] && [ "$backup_all" == "false" ] && [ "$skip_all" == "false" ]; then
+      local real_src=""
+      if [ -L "$dst" ]; then
+        real_src="$(readlink "${dst}")"
+      fi
+      if [ "$real_src" == "${src}" ]; then
+        # 跳过已经link好的
+        skip=true
+      else
+        user "File already exists: ${dst} ($(basename "${src}")), what do you want to do?\n\
+            [s]kip, [S]kip all, [o]verwrite, [O]verwrite all, [b]ackup, [B]ackup all?"
+
+        read -r -p "so what your choice? " -n 1 action
+        case "$action" in
+          o)
+            overwrite=true
+            ;;
+          O)
+            overwrite_all=true
+            ;;
+          b)
+            backup=true
+            ;;
+          B)
+            backup_all=true
+            ;;
+          s)
+            skip=true
+            ;;
+          S)
+            skip_all=true
+            ;;
+          *) ;;
+        esac
+      fi
+    fi
+
+    overwrite=${overwrite:-$overwrite_all}
+    backup=${backup:-$backup_all}
+    skip=${skip:-$skip_all}
+
+    if [ "$overwrite" == "true" ]; then
+      rm -rf "${dst}"
+      success "removed ${dst}"
+    fi
+
+    if [ "$backup" == "true" ]; then
+      mv "${dst}" "${dst}.backup"
+      success "moved ${dst} to ${dst}.backup"
+    fi
+
+  else
+    info "File ${dst} not exists, no need to backup"
+  fi
+
+  if [ "$skip" != "true" ]; then # "false" or empty
+    ln -s "${src}" "${dst}"
+    success "linked ${src} to ${dst}"
+  else
+    success "skipped ${src}"
+  fi
+}
+
+# Creating a link at home directory.
+ct_link_at_home() {
+  local src=$1
+  dst="$HOME/.$(basename "${src%.*}")"
+  link_file "$src" "$dst"
+}
+
+setup_dotfiles() {
+  info 'installing dotfiles'
+
+  local overwrite_all="false" backup_all="false" skip_all="false"
+  find -H "$DOTFILES_ROOT" -maxdepth 4 -name '*.symlink' -not -path '*.git*' >tmp
+  while IFS= read -r -u 3 file; do
+    ct_link_at_home "$file"
+  done 3<tmp
+  rm tmp
+}
+
+setup_proj() {
+  info "link this project to ${HOME}/.dotfiles"
+
+  local overwrite_all="false" backup_all="false" skip_all="false"
+  ct_link_at_home "${DOTFILES_ROOT}"
+  export DOTFILES=$HOME/.dotfiles
+}
+
+brewable() {
+  if [ "$(uname -s)" == "Darwin" ]; then
+    # If we're on a Mac, let's install and setup homebrew.
+    info "› exec p/brewable"
+    # shellcheck disable=SC1091
+    if source p/brewable | while read -r data; do info "$data"; done; then
+      success "dependencies installed"
+    else
+      fail "error installing dependencies"
+    fi
+  else
+    info "$(uname -s) not support now"
+  fi
+}
+
+install_dep() {
+  info "installing dependencies"
+  http_proxy=${http_proxy:-}
+  https_proxy=${https_proxy:-}
+  all_proxy=${all_proxy:-}
+  if [ -n "$CI" ]; then
+    brewable
+  elif [ -n "${https_proxy}" ] && [ -n "${http_proxy}" ] || [ -n "${all_proxy}" ]; then
+    # 只有在设置代理的时候才更新brew和安装工具
+    brewable
+  else
+    info "no proxy, skip installing or updating brew"
+  fi
+}
+
+[ -n "$CI" ] || setup_gitconfig # skip set personal config in ci
+setup_proj
+setup_dotfiles
+install_dep
+
+echo ''
+echo '› All installed!'

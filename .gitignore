@@ -1,0 +1,5 @@
+git/gitconfig.local.symlink
+.vscode
+
+# macos
+.DS_Store

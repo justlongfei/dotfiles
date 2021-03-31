@@ -1,0 +1,203 @@
+#!/bin/bash
+function error() {
+  echo "$1"
+  exit 1
+}
+
+function download() {
+  echo "docker pull $1:$2"
+  docker pull "$1":"$2"
+}
+
+function check_image() {
+  echo "checking $1:$2..."
+  if ! docker images "$1":"$2" | grep "$2"; then
+    download "$1" "$2"
+  fi
+}
+
+function get_container_name() {
+  case "$1" in
+    "5.7")
+      name="mysql5x7"
+      ;;
+    "8.0")
+      name="mysql8x0"
+      ;;
+    "10.3")
+      name="maria10x3"
+      ;;
+    "10.4")
+      name="maria10x4"
+      ;;
+    "10.5")
+      name="maria10x5"
+      ;;
+    *)
+      error "wrong version."
+      ;;
+  esac
+  echo "$name"
+}
+
+function is_started() {
+  docker ps -a | grep "$1" || echo "started"
+}
+
+function is_running() {
+  docker ps | grep "$1" || echo "running"
+}
+
+function status() {
+  name=$(get_container_name "$1")
+  running=$(is_running "$name")
+  [[ -n $running ]] && echo "$name: Running" || echo "$name: Stopped"
+}
+
+function start() {
+  # two image may have same tag
+  image_name="$1"
+  tag="$2"
+  container_name=$(get_container_name "$tag")
+  running=$(is_running "$container_name")
+  [[ -n $running ]] && error "$container_name is already running."
+  started=$(is_started "$container_name")
+  if [[ -n $started ]]; then
+    docker start "$container_name"
+  else
+    docker run --name "$container_name" -e MYSQL_ROOT_PASSWORD=123456 -d "$image_name":"$tag"
+  fi
+}
+
+function stop() {
+  name=$(get_container_name "$1")
+  running=$(is_running "$name")
+  if [[ -n $running ]]; then
+    docker stop "$name"
+  else
+    echo "$name is not running."
+    exit 0
+  fi
+  running=$(is_running "$name")
+  sleep 0.5
+  if [[ -n $running ]]; then
+    echo "failed to stop $name, stop it manually."
+    error "\tdocker stop $name"
+  else
+    echo "stop $name successfully."
+  fi
+}
+
+function conn() {
+  name=$(get_container_name "$1")
+  running=$(is_running "$name")
+  if [[ -z $running ]]; then
+    error "$name is not running."
+  else
+    bash -c "docker exec -it $name mysql -h127.0.0.1 -uroot -p123456 "
+  fi
+}
+
+function choose_typ() {
+  echo "choose database"
+  select typ in "mysql" "mariadb"; do
+    case "$typ" in
+      "mysql")
+        break
+        ;;
+      "mariadb")
+        break
+        ;;
+      *)
+        error "wrong choice."
+        ;;
+    esac
+  done
+  echo "$typ is chooosed."
+}
+
+function choose_action() {
+  echo "choose action"
+  select action in "start" "stop" "connect" "status"; do
+    case $action in
+      "start")
+        break
+        ;;
+      "stop")
+        break
+        ;;
+      "connect")
+        break
+        ;;
+      "status")
+        break
+        ;;
+      *)
+        error "wrong choice."
+        ;;
+    esac
+  done
+  echo "action $action is chooosed."
+}
+
+function choose_version() {
+  echo "choose version"
+  # not support patch version
+  select version in "5.7" "8.0" "10.3" "10.4" "10.5"; do
+    case "$version" in
+      "5.7")
+        break
+        ;;
+      "8.0")
+        break
+        ;;
+      "10.3")
+        break
+        ;;
+      "10.4")
+        break
+        ;;
+      "10.5")
+        break
+        ;;
+      *)
+        error "wrong choice."
+        ;;
+    esac
+    echo "mysql-$version is choosed."
+  done
+}
+
+function main() {
+  [[ -z $(command -v docker) ]] && error "no docker."
+
+  action="$1"
+  # support mysql mairadb
+  # maybe support percona oracle db2 sqlserver
+  typ="$2"
+  version=$3
+  [[ -z "$typ" ]] && choose_typ
+  [[ -z $action ]] && choose_action
+  [[ -z "$version" ]] && choose_version
+
+  case $action in
+    "start")
+      check_image "$typ" "$version"
+      start "$typ" "$version"
+      ;;
+    "stop")
+      stop "$version"
+      ;;
+    "connect")
+      conn "$version"
+      ;;
+    "status")
+      status "$version"
+      ;;
+    *)
+      error "wrong action."
+      ;;
+  esac
+}
+
+main "$@"

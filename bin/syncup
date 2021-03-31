@@ -1,0 +1,67 @@
+#!/bin/bash
+# https://gist.github.com/Juraci/d1414f7c780e2dbe8204
+# modified
+
+red=$(tput setaf 1)
+green=$(tput setaf 2)
+yellow=$(tput setaf 3)
+
+myexit() {
+  printf "${red}Failed: %b!!!\n" "$1"
+  exit 1
+}
+
+# checks if it's a git repo
+check_repo() {
+  if [ ! -d "$(pwd)"/.git ]; then
+    myexit "$(pwd) is not a git repo"
+  fi
+}
+
+# checks if there is a remote repo called upstream
+upstream_exists() {
+  # return 0 if exists
+  git remote -v | grep -w upstream >/dev/null 2>&1
+}
+
+# check if a branch was passed as parameter and if not it makes the master as the default branch
+check_branch() {
+  if [[ $branch ]]; then
+    printf "${green}Branch to sync to is set to ${yellow}%s${green}\n" "$branch"
+  else
+    myexit "Branch to sync not configured"
+  fi
+}
+
+# fetch updates from upstream
+# merges upstream with a given branch
+# push the changes
+sync() {
+  printf "${green}%s\n" "Fetching its updates..."
+  ret=$(git fetch upstream)
+  if $ret; then
+    printf "${green}Merging updates with ${yellow}%s${green}\n" "$branch"
+    git merge upstream/"$branch"
+    git push
+  else
+    myexit "Failed fetch upstream"
+  fi
+}
+
+main() {
+  # default "`pwd`"
+  repo_path=$1
+  [ -z "${repo_path}" ] && repo_path=$(pwd)
+  [ -d "$repo_path" ] || myexit "First parameter is not directory"
+  # default "current branch"
+  branch=$2
+  [ -z "$branch" ] && branch=$(git rev-parse --abbrev-ref HEAD)
+  cd "$repo_path" || exit
+  check_repo
+  # if there are no remote repository called upstream
+  upstream_exists || myexit "Upstream not configured in this repo($(pwd))"
+  check_branch
+  sync
+}
+
+main "$@"
