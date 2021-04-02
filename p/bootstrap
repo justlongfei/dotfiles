@@ -31,7 +31,7 @@ fail() {
 # 不同用户的设置不一样
 setup_gitconfig() {
   if ! [ -f git/gitconfig.local.symlink ]; then
-    info 'setup gitconfig'
+    info '› setup gitconfig'
 
     user ' - What is your github author name?'
     read -er git_authorname
@@ -40,7 +40,7 @@ setup_gitconfig() {
 
     sed -e "s/AUTHOR_NAME/$git_authorname/g" -e "s/AUTHOR_EMAIL/$git_authoremail/g" git/gitconfig.local.symlink.template >git/gitconfig.local.symlink
 
-    success 'gitconfig'
+    success "› config succ"
   fi
 }
 
@@ -67,7 +67,7 @@ link_file() {
         user "File already exists: ${dst} ($(basename "${src}")), what do you want to do?\n\
             [s]kip, [S]kip all, [o]verwrite, [O]verwrite all, [b]ackup, [B]ackup all?"
 
-        read -r -p "so what your choice? " -n 1 action
+        read -r -p "› so what your choice? " -n 1 action
         case "$action" in
           o)
             overwrite=true
@@ -98,23 +98,23 @@ link_file() {
 
     if [ "$overwrite" == "true" ]; then
       rm -rf "${dst}"
-      success "removed ${dst}"
+      success "› removed ${dst}"
     fi
 
     if [ "$backup" == "true" ]; then
       mv "${dst}" "${dst}.backup"
-      success "moved ${dst} to ${dst}.backup"
+      success "› moved ${dst} to ${dst}.backup"
     fi
 
   else
-    info "File ${dst} not exists, no need to backup"
+    info "› File ${dst} not exists, no need to backup"
   fi
 
   if [ "$skip" != "true" ]; then # "false" or empty
     ln -s "${src}" "${dst}"
-    success "linked ${src} to ${dst}"
+    success "› linked ${src} to ${dst}"
   else
-    success "skipped ${src}"
+    success "› skipped ${src}"
   fi
 }
 
@@ -126,7 +126,7 @@ ct_link_at_home() {
 }
 
 setup_dotfiles() {
-  info 'installing dotfiles'
+  info "› installing dotfiles"
 
   local overwrite_all="false" backup_all="false" skip_all="false"
   find -H "$DOTFILES_ROOT" -maxdepth 4 -name '*.symlink' -not -path '*.git*' >tmp
@@ -137,7 +137,7 @@ setup_dotfiles() {
 }
 
 setup_proj() {
-  info "link this project to ${HOME}/.dotfiles"
+  info "› link this project to ${HOME}/.dotfiles"
 
   local overwrite_all="false" backup_all="false" skip_all="false"
   ct_link_at_home "${DOTFILES_ROOT}"
@@ -160,7 +160,7 @@ brewable() {
 }
 
 install_dep() {
-  info "installing dependencies"
+  info "› installing dependencies"
   http_proxy=${http_proxy:-}
   https_proxy=${https_proxy:-}
   all_proxy=${all_proxy:-}
