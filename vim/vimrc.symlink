@@ -8,6 +8,9 @@ Plug 'fatih/vim-go'
 " List ends here. Plugins become visible to Vim after this call.
 call plug#end()
 
+" colorscheme
+colo desert
+
 " set linebreak
 " set wrap
 filetype indent plugin on
