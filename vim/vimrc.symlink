@@ -3,6 +3,7 @@ call plug#begin('~/.vim/plugged')
 
 " Declare the list of plugins.
 Plug 'preservim/nerdtree'
+Plug 'vim-airline/vim-airline'
 Plug 'fatih/vim-go'
 
 " List ends here. Plugins become visible to Vim after this call.
@@ -14,15 +15,15 @@ colo desert
 " set linebreak
 " set wrap
 filetype indent plugin on
-set  ruler
+set ruler
 set autoindent
 set encoding=utf-8
 set expandtab
 set hlsearch
 set ignorecase
 set incsearch
-set list
-set listchars=tab:»■,trail:■
+" set list
+" set listchars=tab:»■,trail:■
 set nobackup
 set noswapfile
 set nowrap
