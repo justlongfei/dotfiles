@@ -6,13 +6,23 @@ Plug 'preservim/nerdtree'
 Plug 'vim-airline/vim-airline'
 Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 Plug 'junegunn/fzf.vim'
+Plug 'tpope/vim-commentary'
 Plug 'fatih/vim-go'
+
+" Vim theme
+Plug 'morhetz/gruvbox'
 
 " List ends here. Plugins become visible to Vim after this call.
 call plug#end()
 
-" colorscheme
-colo desert
+" Colorscheme
+"
+" The reason we are using autocmd is that,
+" vim always read .vimrc file first and after that starts to load plugins,
+" so in this case, we use autocmd vimenter,
+" to be sure that all plugins are loaded completely and then use gruvbox.
+set background=dark
+autocmd vimenter * ++nested colorscheme gruvbox
 
 " set linebreak
 " set wrap
