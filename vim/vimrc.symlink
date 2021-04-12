@@ -1,3 +1,10 @@
+" ============================================== VIMRC ================================================================
+" A personal vim config.
+" Author: longfei
+" Email: lf.x.0720@gmail.com
+" ============================================== VIMRC ================================================================
+
+" ============================================== VIM-PLUG =============================================================
 " Plugins will be downloaded under the specified directory.
 call plug#begin('~/.vim/plugged')
 
@@ -14,15 +21,18 @@ Plug 'morhetz/gruvbox'
 
 " List ends here. Plugins become visible to Vim after this call.
 call plug#end()
+" end vim-plug
+" ============================================== VIM-PLUG =============================================================
 
-" Colorscheme
-"
+" ============================================== COLORSCHEME ==========================================================
 " The reason we are using autocmd is that,
 " vim always read .vimrc file first and after that starts to load plugins,
 " so in this case, we use autocmd vimenter,
 " to be sure that all plugins are loaded completely and then use gruvbox.
 set background=dark
-autocmd vimenter * ++nested colorscheme gruvbox
+autocmd vimenter = ++nested colorscheme gruvbox
+" end colorscheme
+" ============================================== COLORSCHEME ==========================================================
 
 " set linebreak
 " set wrap
@@ -54,17 +64,23 @@ set wildmenu
 set wildmode=longest:list,full
 syntax on
 
-"=====================================================
-"===================== MAPPINGS ======================
-
+" ============================================== BASIC-MAPPINGS =======================================================
 " This comes first, because we have mappings that depend on leader
 " With a map leader it's possible to do extra key combinations
 " i.e: <leader>w saves the current file
 let mapleader = ","
+" end basic-mappings
+" ============================================== BASIC-MAPPINGS =======================================================
 
-" ==================== NerdTree ====================
+" ============================================== PLUGIN-SETTINGS ======================================================
+" ----------------------------------------------- NerdTree ------------------------------------------------------------
 " For toggling
 noremap <Leader>e :NERDTreeToggle<cr>
 " Exit Vim if NERDTree is the only window left.
-autocmd BufEnter * if tabpagenr('$') == 1 && winnr('$') == 1 && exists('b:NERDTree') && b:NERDTree.isTabTree() |
+autocmd BufEnter = if tabpagenr('$') == 1 && winnr('$') == 1 && exists('b:NERDTree') && b:NERDTree.isTabTree() |
     \ quit | endif
+
+" ----------------------------------------------- fzf -----------------------------------------------------------------
+let g:fzf_command_prefix = 'Fzf'
+" end plugins-settings
+" ============================================== PLUGIN-SETTINGS ======================================================
