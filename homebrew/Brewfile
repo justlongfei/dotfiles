@@ -5,9 +5,11 @@ tap "homebrew/core"
 tap "romkatv/powerlevel10k"
 
 # Brew
+brew "bat"
 brew "go"
 brew "hugo"
 brew "mas"
+brew "md5sha1sum"
 brew "openjdk@8"
 brew "tmux"
 brew "zsh-syntax-highlighting"
@@ -18,14 +20,13 @@ cask "alfred"
 cask "appcleaner"
 cask "google-chrome"
 cask "iterm2"
-# cask "netnewswire"
 cask "picgo"
 cask "snipaste"
 cask "typora"
 cask "visual-studio-code"
-cask "wechat"
 
 # App Store
+mas "WeChat", id: 836500024
 mas "Microsoft OneNote", id: 784801555
 mas "OneDrive", id: 823766827
 mas "RunCat", id: 1429033973

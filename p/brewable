@@ -17,7 +17,6 @@ if [ -n "$CI" ]; then
   # in ci env
   echo "› brew update."
   brew update >/dev/null 2>&1
-  brew bundle --file "$DOTFILES"/homebrew/Brewfile
 else
   should_go_on="true"
   while [ "$should_go_on" = "true" ]; do
