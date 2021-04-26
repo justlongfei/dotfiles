@@ -1,0 +1,26 @@
+tap "homebrew/bundle"
+tap "homebrew/cask"
+tap "homebrew/core"
+tap "romkatv/powerlevel10k"
+brew "go"
+brew "hugo"
+brew "openjdk@8"
+brew "tmux"
+brew "zsh-syntax-highlighting"
+brew "romkatv/powerlevel10k/powerlevel10k"
+cask "alfred"
+cask "appcleaner"
+cask "google-chrome"
+cask "iterm2"
+# cask "netnewswire"
+cask "picgo"
+cask "snipaste"
+cask "typora"
+cask "visual-studio-code"
+cask "wechat"
+
+# apple store
+mas "Microsoft OneNote", id: 784801555
+mas "OneDrive", id: 823766827
+mas "RunCat", id: 1429033973 
+

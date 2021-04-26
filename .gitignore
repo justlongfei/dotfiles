@@ -3,3 +3,6 @@ git/gitconfig.local.symlink
 
 # macos
 .DS_Store
+
+# brew bundle lock
+Brewfile.lock.json
