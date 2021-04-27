@@ -29,7 +29,7 @@ call plug#end()
 " vim always read .vimrc file first and after that starts to load plugins,
 " so in this case, we use autocmd vimenter,
 " to be sure that all plugins are loaded completely and then use gruvbox.
-set background=dark
+" colo gruvbox
 autocmd vimenter = ++nested colorscheme gruvbox
 " end colorscheme
 " ============================================== COLORSCHEME ==========================================================
@@ -82,5 +82,6 @@ autocmd BufEnter = if tabpagenr('$') == 1 && winnr('$') == 1 && exists('b:NERDTr
 
 " ----------------------------------------------- fzf -----------------------------------------------------------------
 let g:fzf_command_prefix = 'Fzf'
+nnoremap <c-p> :FzfFiles<CR>
 " end plugins-settings
 " ============================================== PLUGIN-SETTINGS ======================================================

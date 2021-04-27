@@ -12,32 +12,60 @@ echo "› setting macos."
 echo "› installing homebrew."
 "$DOTFILES"/homebrew/install
 
-# Upgrade homebrew
-if [ -n "$CI" ]; then
-  # in ci env
-  echo "› brew update."
-  brew update >/dev/null 2>&1
-else
-  should_go_on="true"
-  while [ "$should_go_on" = "true" ]; do
-    read -r -p "do you want update brew?[y/N] " -n 1 choice
-    case "$choice" in
-      "y" | "Y")
-        echo "› brew update."
-        brew update >/dev/null 2>&1
-        brew bundle --file "$DOTFILES"/homebrew/Brewfile
-        should_go_on="false"
-        ;;
-      "n" | "N")
-        echo "› skip updating homebrew."
-        should_go_on="false"
-        ;;
-      *)
-        echo "› invalid input, please input again![y/N] "
-        ;;
-    esac
-  done
-fi
+# Update homebrew
+function updateBrew() {
+  if [ -n "$CI" ]; then
+    # in ci env
+    echo "› brew update."
+    brew update >/dev/null 2>&1
+  else
+    should_go_on="true"
+    while [ "$should_go_on" = "true" ]; do
+      read -r -p "do you want to update brew?[y/N] " -n 1 choice
+      case "$choice" in
+        "y" | "Y")
+          echo "› brew update."
+          brew update >/dev/null 2>&1
+          should_go_on="false"
+          ;;
+        "n" | "N")
+          echo "› skip updating homebrew."
+          should_go_on="false"
+          ;;
+        *)
+          echo "› invalid input, please input again![y/N] "
+          ;;
+      esac
+    done
+  fi
+}
+
+# brew bundle --file
+function doBundle() {
+  if [ -z "$CI" ]; then
+    should_go_on="true"
+    while [ "$should_go_on" = "true" ]; do
+      read -r -p "do you want to bundle by Brewfile?[y/N] " -n 1 choice
+      case "$choice" in
+        "y" | "Y")
+          echo "› brew bundle by Brewfile."
+          brew bundle --file "$DOTFILES"/homebrew/Brewfile
+          should_go_on="false"
+          ;;
+        "n" | "N")
+          echo "› skip doing brew bundle"
+          should_go_on="false"
+          ;;
+        *)
+          echo "› invalid input, please input again![y/N] "
+          ;;
+      esac
+    done
+  fi
+}
+
+updateBrew
+doBundle
 
 # Install software
 echo "› exec $DOTFILES/p/install"
