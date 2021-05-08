@@ -5,7 +5,7 @@
 
 ## Requirements
 - execute `xcode-select --install` for macOS.
-- install [font](https://github.com/romkatv/powerlevel10k#fonts) for powerlevel10k.
+
 
 ## Install
 ```bash
@@ -15,6 +15,12 @@ p/bootstrap
 ```
 
 ## How it works
+
+## FAQ
+1. There are insecure directories([more details](https://github.com/zsh-users/zsh-completions/issues/433))  
+A: compaudit | xargs chmod g-w
+2. font for p10k?   
+A: install [font](https://github.com/romkatv/powerlevel10k#fonts) for powerlevel10k when `p10k configure` not install for us.
 
 ## CI
 use shellcheck && shellfmt
