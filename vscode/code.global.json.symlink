@@ -14,6 +14,13 @@
     /****** workbench ******/ 
     "workbench.startupEditor": "none",
     "workbench.colorTheme": "Dracula Soft",
+    "workbench.colorCustomizations": {
+        "editor.lineHighlightBackground": "#4d0000",
+        "editor.lineHighlightBorder": "#666666"
+    },
+    "workbench.editor.limit.enabled": true,
+    "workbench.editor.tabSizing": "shrink",
+    "workbench.editor.limit.value": 18,
 
     /****** others ******/
     "typescript.surveys.enabled": false,
