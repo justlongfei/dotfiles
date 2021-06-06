@@ -1,46 +1,50 @@
-# Tapping
 tap "homebrew/bundle"
 tap "homebrew/cask"
+tap "homebrew/cask-fonts"
 tap "homebrew/core"
 tap "romkatv/powerlevel10k"
-
-# Brew
-brew "python@3.9"
 brew "autoconf"
 brew "automake"
+brew "bat"
+brew "python@3.9"
+brew "glib"
 brew "pkg-config"
+brew "libx11"
 brew "cmake"
 brew "coreutils"
 brew "gnu-getopt"
 brew "gnu-sed"
 brew "gnutls"
-brew "bat"
 brew "go"
 brew "golangci-lint"
 brew "hugo"
-brew "maven"
 brew "mas"
+brew "maven"
+brew "nspr"
+brew "nss"
 brew "openjdk@8"
 brew "poppler"
+brew "rustup-init"
 brew "tmux"
 brew "tree"
 brew "unixodbc"
 brew "wget"
 brew "zsh-syntax-highlighting"
 brew "romkatv/powerlevel10k/powerlevel10k"
-
-# Cask
 cask "alfred"
 cask "appcleaner"
+cask "font-fira-code"
 cask "google-chrome"
 cask "iterm2"
 cask "picgo"
 cask "snipaste"
+cask "spotify"
+cask "sublime-text"
+cask "texstudio"
 cask "typora"
 cask "visual-studio-code"
-
-# App Store
-mas "WeChat", id: 836500024
+cask "zotero"
 mas "Microsoft OneNote", id: 784801555
 mas "OneDrive", id: 823766827
 mas "RunCat", id: 1429033973
+mas "微信", id: 836500024
