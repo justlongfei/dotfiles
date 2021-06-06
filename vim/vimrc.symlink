@@ -62,6 +62,7 @@ set tabstop=2
 set textwidth=120
 set wildmenu
 set wildmode=longest:list,full
+set cursorline
 syntax on
 
 " ============================================== BASIC-MAPPINGS =======================================================
