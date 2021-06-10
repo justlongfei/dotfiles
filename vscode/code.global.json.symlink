@@ -20,7 +20,7 @@
     },
     "workbench.editor.limit.enabled": true,
     "workbench.editor.tabSizing": "shrink",
-    "workbench.editor.limit.value": 18,
+    "workbench.editor.limit.value": 10,
 
     /****** others ******/
     "typescript.surveys.enabled": false,
