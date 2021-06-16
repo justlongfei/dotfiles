@@ -21,6 +21,8 @@
     "workbench.editor.limit.enabled": true,
     "workbench.editor.tabSizing": "shrink",
     "workbench.editor.limit.value": 10,
+    "workbench.productIconTheme": "fluent-icons",
+    "workbench.iconTheme": "vscode-icons",
 
     /****** others ******/
     "typescript.surveys.enabled": false,
@@ -100,4 +102,16 @@
             "italic": false 
         }
     ],
+    "go.delveConfig": {
+        "dlvLoadConfig": {
+            "followPointers": true,
+            "maxVariableRecurse": 1,
+            "maxStringLen": 256,
+            "maxArrayValues": 64,
+            "maxStructFields": -1
+        },
+        "apiVersion": 2,
+        "showGlobalVariables": false,
+        "debugAdapter": "legacy"
+    },
 }
