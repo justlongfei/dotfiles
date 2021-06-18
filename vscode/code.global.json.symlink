@@ -1,7 +1,7 @@
 {
     /****** editor ******/ 
-    "editor.fontSize": 13,
-    "editor.fontFamily": "FiraCode-Retina",
+    "editor.fontSize": 14,
+    "editor.fontFamily": "Cascadia Mono, FiraCode-Retina, Sarasa Mono SC",
     "editor.fontLigatures": true,
     "editor.fontWeight": "300",
     "editor.renderControlCharacters": true,

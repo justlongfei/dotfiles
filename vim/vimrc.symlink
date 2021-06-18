@@ -20,6 +20,7 @@ Plug 'fatih/vim-go'
 
 " Vim theme
 Plug 'morhetz/gruvbox'
+Plug 'dracula/vim', { 'as': 'dracula' }
 
 " List ends here. Plugins become visible to Vim after this call.
 call plug#end()
@@ -28,6 +29,7 @@ call plug#end()
 " >>>>>>>>>>>>>>>>>>>>>>>>>>>>
 "  basic configure
 " <<<<<<<<<<<<<<<<<<<<<<<<<<<<
+colorscheme dracula
 " set linebreak
 " set wrap
 filetype indent plugin on
@@ -77,5 +79,5 @@ autocmd BufEnter = if tabpagenr('$') == 1 && winnr('$') == 1 && exists('b:NERDTr
 
 " FZF
 let g:fzf_command_prefix = 'Fzf'
-nnoremap <c-p> :FzfFiles<CR>
-
+nnoremap <C-p> :FzfFiles<CR>
+" nnoremap <C-S-f> :FzfAg<CR>
