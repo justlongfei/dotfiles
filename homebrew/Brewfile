@@ -20,6 +20,7 @@ brew "golangci-lint"
 brew "hugo"
 brew "mas"
 brew "maven"
+brew "md5sha1sum"
 brew "nspr"
 brew "nss"
 brew "openjdk@8"
@@ -48,3 +49,4 @@ mas "Microsoft OneNote", id: 784801555
 mas "OneDrive", id: 823766827
 mas "RunCat", id: 1429033973
 mas "微信", id: 836500024
+mas "网易云音乐", id: 944848654
