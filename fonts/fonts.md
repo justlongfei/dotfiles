@@ -1,0 +1,4 @@
+- fira code
+- cascadia code
+- mesloLGS NF 
+- Sarasa Gothic
