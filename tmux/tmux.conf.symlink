@@ -1,6 +1,7 @@
 # -- general -------------------------------------------------------------------
 
 set -g default-terminal "screen-256color" # colors!
+set -g mouse on
 
 # reload configuration
 bind r source-file ~/.tmux.conf \; display '~/.tmux.conf sourced'
