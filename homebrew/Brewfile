@@ -46,6 +46,7 @@ cask "sublime-text"
 cask "typora"
 cask "visual-studio-code"
 cask "zotero"
+cask "logseq"
 
 # cask "texstudio"
 
