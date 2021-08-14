@@ -1,8 +1,11 @@
+######## tap ########
 tap "homebrew/bundle"
 tap "homebrew/cask"
 tap "homebrew/cask-fonts"
 tap "homebrew/core"
 tap "romkatv/powerlevel10k"
+
+######## brew ########
 brew "autoconf"
 brew "automake"
 brew "bat"
@@ -21,8 +24,6 @@ brew "hugo"
 brew "mas"
 brew "maven"
 brew "md5sha1sum"
-brew "nspr"
-brew "nss"
 brew "openjdk@8"
 brew "poppler"
 brew "rustup-init"
@@ -32,6 +33,8 @@ brew "unixodbc"
 brew "wget"
 brew "zsh-syntax-highlighting"
 brew "romkatv/powerlevel10k/powerlevel10k"
+
+######## cask ########
 cask "alfred"
 cask "appcleaner"
 cask "font-fira-code"
@@ -39,12 +42,16 @@ cask "google-chrome"
 cask "iterm2"
 cask "picgo"
 cask "snipaste"
-cask "spotify"
 cask "sublime-text"
-cask "texstudio"
 cask "typora"
 cask "visual-studio-code"
 cask "zotero"
+cask "logseq"
+cask "notion"
+
+# cask "texstudio"
+
+######## mas ########
 mas "Microsoft OneNote", id: 784801555
 mas "OneDrive", id: 823766827
 mas "RunCat", id: 1429033973
