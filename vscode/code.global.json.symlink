@@ -1,7 +1,7 @@
 {
     /****** editor ******/ 
     "editor.fontSize": 13,
-    "editor.fontFamily": "Cascadia Mono, FiraCode-Retina, Sarasa Mono SC",
+    "editor.fontFamily": "JetBrains Mono, Cascadia Mono, FiraCode-Retina, Sarasa Mono SC",
     // "editor.fontFamily": "FiraCode-Retina, Sarasa Mono SC",
     "editor.fontLigatures": true,
     "editor.fontWeight": "300",
@@ -14,7 +14,6 @@
 
     /****** workbench ******/ 
     "workbench.startupEditor": "none",
-    "workbench.colorTheme": "Dracula Soft",
     "workbench.colorCustomizations": {
         "editor.lineHighlightBackground": "#4d0000",
         "editor.lineHighlightBorder": "#666666"
@@ -36,6 +35,7 @@
     },
     "files.autoSave": "afterDelay",
     "terminal.integrated.fontFamily": "'MesloLGS NF', Menlo",
+    "debug.allowBreakpointsEverywhere": true,
 
     /****** plugins ******/
     // go
@@ -47,16 +47,17 @@
         }
     },
     "go.delveConfig": {
-        "dlvLoadConfig": {
-            "followPointers": true,
-            "maxVariableRecurse": 1,
-            "maxStringLen": 256,
-            "maxArrayValues": 64,
-            "maxStructFields": -1
-        },
-        "apiVersion": 2,
-        "showGlobalVariables": false,
-        "debugAdapter": "legacy"
+        "debugAdapter": "dlv-dap",
+        // "debugAdapter": "legacy",
+        // "dlvLoadConfig": {
+        //     "followPointers": true,
+        //     "maxVariableRecurse": 1,
+        //     "maxStringLen": 256,
+        //     "maxArrayValues": 64,
+        //     "maxStructFields": -1
+        // },
+        // "apiVersion": 2,
+        // "showGlobalVariables": false,
     },
 
     // better-comments
@@ -121,4 +122,5 @@
     "cmake.configureOnOpen": true,
     "cmake.buildDirectory": "${workspaceFolder}/bld",
     "cmake.installPrefix": "${workspaceFolder}/inst",
+    "workbench.colorTheme": "Dracula Soft",
 }
