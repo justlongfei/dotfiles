@@ -11,6 +11,7 @@
     "editor.rulers": [
        120
     ],
+    "editor.guides.bracketPairs": true,
 
     /****** workbench ******/ 
     "workbench.startupEditor": "none",
@@ -23,6 +24,7 @@
     "workbench.editor.limit.value": 10,
     "workbench.productIconTheme": "fluent-icons",
     "workbench.iconTheme": "vscode-icons",
+    "workbench.colorTheme": "Panda Syntax",
 
     /****** others ******/
     "typescript.surveys.enabled": false,
@@ -45,19 +47,6 @@
         "editor.codeActionsOnSave": {
             "source.organizeImports": true
         }
-    },
-    "go.delveConfig": {
-        "debugAdapter": "dlv-dap",
-        // "debugAdapter": "legacy",
-        // "dlvLoadConfig": {
-        //     "followPointers": true,
-        //     "maxVariableRecurse": 1,
-        //     "maxStringLen": 256,
-        //     "maxArrayValues": 64,
-        //     "maxStructFields": -1
-        // },
-        // "apiVersion": 2,
-        // "showGlobalVariables": false,
     },
 
     // better-comments
@@ -122,5 +111,4 @@
     "cmake.configureOnOpen": true,
     "cmake.buildDirectory": "${workspaceFolder}/bld",
     "cmake.installPrefix": "${workspaceFolder}/inst",
-    "workbench.colorTheme": "Dracula Soft",
 }
