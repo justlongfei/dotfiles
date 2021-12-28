@@ -22,7 +22,6 @@ brew "golangci-lint"
 brew "hugo"
 brew "mas"
 brew "maven"
-brew "md5sha1sum"
 brew "openjdk@8"
 brew "poppler"
 brew "rustup-init"
@@ -47,6 +46,7 @@ cask "zotero"
 cask "logseq"
 cask "obsidian"
 cask "notion"
+cask "intellij-idea-ce"
 
 ######## mas ########
 # TODO (uncomment after "mas not signed in to Mac App Store" fixing.
