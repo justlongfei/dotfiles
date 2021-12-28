@@ -48,6 +48,7 @@ cask "zotero"
 cask "logseq"
 cask "obsidian"
 cask "notion"
+cask "xmind-zen"
 
 ######## mas ########
 # TODO (uncomment after "mas not signed in to Mac App Store" fixing.
