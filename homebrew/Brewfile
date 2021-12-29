@@ -50,7 +50,9 @@ cask "obsidian"
 cask "notion"
 cask "xmind-zen"
 cask "intellij-idea-ce"
-case "pycharm-ce"
+cask "pycharm-ce"
+cask "drawio"
+
 
 ######## mas ########
 # TODO (uncomment after "mas not signed in to Mac App Store" fixing.
