@@ -53,6 +53,7 @@ cask "intellij-idea-ce"
 cask "pycharm-ce"
 cask "drawio"
 cask "bitwarden"
+cask "rectangle"
 
 
 ######## mas ########
