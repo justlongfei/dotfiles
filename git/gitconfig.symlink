@@ -3,3 +3,5 @@
         path = ~/.gitconfig.local
 [init]
 	defaultBranch = main
+[core]
+	quotepath = false
