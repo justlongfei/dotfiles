@@ -50,6 +50,8 @@ function doBundle() {
         "y" | "Y")
           echo "› brew bundle by Brewfile."
           brew bundle --file "$DOTFILES"/homebrew/Brewfile
+          echo "› brew cleanup"
+          brew cleanup
           should_go_on="false"
           ;;
         "n" | "N")

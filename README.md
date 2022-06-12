@@ -9,7 +9,7 @@
 
 ## Install
 ```bash
-git clone https://github.com/oops-lgtm/dotfiles.git
+git clone https://github.com/justlongfei/dotfiles.git
 cd dotfiles
 p/bootstrap
 ```
