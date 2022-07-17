@@ -40,6 +40,7 @@ brew "romkatv/powerlevel10k/powerlevel10k"
 ######################
 ######## cask ########
 ######################
+cask "google-chrome"
 # cask "alfred" -- deprecated
 cask "raycast"
 cask "appcleaner"
