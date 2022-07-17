@@ -108,7 +108,7 @@
     ],
 
     // cmake
-    "cmake.configureOnOpen": true,
+    "cmake.configureOnOpen": false,
     "cmake.buildDirectory": "${workspaceFolder}/bld",
     "cmake.installPrefix": "${workspaceFolder}/inst",
 }

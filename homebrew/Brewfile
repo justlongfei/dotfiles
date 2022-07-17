@@ -1,11 +1,15 @@
+#####################
 ######## tap ########
+#####################
 tap "homebrew/bundle"
 tap "homebrew/cask"
 tap "homebrew/cask-fonts"
 tap "homebrew/core"
 tap "romkatv/powerlevel10k"
 
+######################
 ######## brew ########
+######################
 brew "autoconf"
 brew "automake"
 brew "bat"
@@ -33,27 +37,36 @@ brew "wget"
 brew "zsh-syntax-highlighting"
 brew "romkatv/powerlevel10k/powerlevel10k"
 
+######################
 ######## cask ########
-cask "alfred"
+######################
+# cask "alfred" -- deprecated
+cask "raycast"
 cask "appcleaner"
-cask "font-fira-code"
-cask "font-jetbrains-mono"
-cask "alacritty"
 cask "picgo"
 cask "snipaste"
-cask "sublime-text"
+cask "bitwarden"
+cask "rectangle"
+
+######## terminal ########
+# cask "alacritty"
+
+####### font ########
+cask "font-fira-code"
+cask "font-jetbrains-mono"
+
+######## ide/editor ########
 cask "visual-studio-code"
+cask "sublime-text"
 cask "intellij-idea-ce"
+# cask "intellij-idea-ce"
+# cask "pycharm-ce"
+
+######## notes ########
 cask "zotero"
 cask "logseq"
 cask "obsidian"
 cask "notion"
-cask "xmind-zen"
-# cask "intellij-idea-ce"
-# cask "pycharm-ce"
-cask "bitwarden"
-cask "rectangle"
-
 
 ######## mas ########
 # TODO (uncomment after "mas not signed in to Mac App Store" fixing.

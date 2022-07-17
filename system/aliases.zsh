@@ -19,7 +19,7 @@ alias ...="cd ../.."
 alias ....="cd ../../.."
 
 alias r!="echo 'reload zsh config' && source ~/.zshrc"
-alias cls='clear' # Good 'ol Clear Screen command
+alias clr='clear' # Good 'ol Clear Screen command
 alias pubkey="more ~/.ssh/id_ed25519.pub | pbcopy | echo '=> Public key copied to pasteboard.'"
 alias pretty_date="date '+%Y-%m-%d'"
 alias grep="grep --color=auto"
