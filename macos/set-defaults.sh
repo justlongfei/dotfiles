@@ -12,3 +12,8 @@
 defaults write -g ApplePressAndHoldEnabled -bool false
 defaults write com.apple.dock springboard-columns -int 10
 defaults write com.apple.dock springboard-rows -int 8
+# Run `killall Dock` to make it works
+killall Dock
+
+# linking icloud in our home.
+ln -s ~/Library/Mobile\ Documents/com~apple~CloudDocs ~/CloudDocs

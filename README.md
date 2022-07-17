@@ -16,6 +16,8 @@ p/bootstrap
 
 ## How it works
 
+Please read [HOW IT WORKS](HOW-IT-WORKS.md).
+
 ## FAQ
 1. There are insecure directories([more details](https://github.com/zsh-users/zsh-completions/issues/433))  
 A: compaudit | xargs chmod g-w
