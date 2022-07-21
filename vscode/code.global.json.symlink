@@ -1,74 +1,62 @@
 {
-    /****** editor ******/ 
-    "editor.fontSize": 13,
-    "editor.fontFamily": "JetBrains Mono, Cascadia Mono, FiraCode-Retina, Sarasa Mono SC",
-    // "editor.fontFamily": "FiraCode-Retina, Sarasa Mono SC",
-    "editor.fontLigatures": true,
-    "editor.fontWeight": "300",
+    /********** editor **********/
+    "editor.fontSize": 14,
+    "editor.fontFamily": "Menlo, Monaco, 'Fira Code', 'Courier New', 'LXGW WenKai', monospace",
     "editor.renderControlCharacters": true,
     "editor.suggestSelection": "first",
     "editor.wordWrap": "on",
     "editor.rulers": [
-       120
+        120
     ],
-    "editor.guides.bracketPairs": true,
+    "editor.minimap.enabled": false,
 
-    /****** workbench ******/ 
+    /********** terminal **********/
+    // 禁用多行粘贴警告
+    "terminal.integrated.enableMultiLinePasteWarning": false,
+
+    /********** workbench **********/
     "workbench.startupEditor": "none",
+    "workbench.editor.limit.enabled": true,
+    "workbench.editor.tabSizing": "shrink",
+    "workbench.editor.limit.value": 10,
+    "workbench.iconTheme":"vscode-icons",
+    "workbench.productIconTheme": "fluent-icons",
+    "workbench.colorTheme": "Panda Syntax",
     "workbench.colorCustomizations": {
         "editor.lineHighlightBackground": "#4d0000",
         "editor.lineHighlightBorder": "#666666"
     },
-    "workbench.editor.limit.enabled": true,
-    "workbench.editor.tabSizing": "shrink",
-    "workbench.editor.limit.value": 10,
-    "workbench.productIconTheme": "fluent-icons",
-    "workbench.iconTheme": "vscode-icons",
-    "workbench.colorTheme": "Panda Syntax",
 
-    /****** others ******/
+
+    /********** others **********/
+    "window.zoomLevel": 1,
     "typescript.surveys.enabled": false,
     "explorer.confirmDelete": false,
+    "files.autoSave": "onFocusChange",
     "files.exclude": {
         "**/.classpath": true,
         "**/.project": true,
         "**/.settings": true,
         "**/.factorypath": true
     },
-    "files.autoSave": "afterDelay",
-    "terminal.integrated.fontFamily": "'MesloLGS NF', Menlo",
     "debug.allowBreakpointsEverywhere": true,
+    "telemetry.telemetryLevel": "crash",
 
-    /****** plugins ******/
+    /********** plugins **********/
+    // git
+    "git.ignoreLegacyWarning": true,
+
     // go
     "[go]": {
         "editor.insertSpaces": false,
         "editor.formatOnSave": true,
         "editor.codeActionsOnSave": {
             "source.organizeImports": true
-        }
+        },
     },
 
     // better-comments
     "better-comments.tags": [
-        {
-            "tag": "!",
-            "color": "#FF2D00",
-            "strikethrough": false,
-            "underline": false,
-            "backgroundColor": "transparent",
-            "bold": false,
-            "italic": false
-        },
-        {
-            "tag": "?",
-            "color": "#3498DB",
-            "strikethrough": false,
-            "underline": false,
-            "backgroundColor": "transparent",
-            "bold": false,
-            "italic": false
-        },
         {
             "tag": "//",
             "color": "#474747",
@@ -81,15 +69,6 @@
         {
             "tag": "todo",
             "color": "#FF8C00",
-            "strikethrough": false,
-            "underline": false,
-            "backgroundColor": "transparent",
-            "bold": false,
-            "italic": false
-        },
-        {
-            "tag": "*",
-            "color": "#98C379",
             "strikethrough": false,
             "underline": false,
             "backgroundColor": "transparent",
@@ -111,4 +90,18 @@
     "cmake.configureOnOpen": false,
     "cmake.buildDirectory": "${workspaceFolder}/bld",
     "cmake.installPrefix": "${workspaceFolder}/inst",
+
+    // vsicons
+    "vsicons.dontShowNewVersionMessage": true,
+
+    // java
+    // Since vscode-java 0.65.0, Java 11 is the minimum required version.
+    // Ref: https://github.com/redhat-developer/vscode-java/wiki/JDK-Requirements
+    "java.jdt.ls.java.home": "/home/pikpo/sdk/jdk-17.0.3.1",
+    "java.configuration.runtimes": [
+        {
+            "name": "JavaSE-17",
+            "path": "/home/pikpo/sdk/jdk-17.0.3.1/"
+        }
+    ],
 }
