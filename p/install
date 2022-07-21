@@ -6,12 +6,10 @@ set -e
 
 cd "$(dirname "$0")"/..
 
-
 # find the installers and run them iteratively
 if test "$(command -v brew)"; then
-    find . -name install-hb.sh | while read -r installer; do echo "executing ${installer}." && sh -c "${installer}"; done
-    echo "macos"
+  find . -name install-hb.sh | while read -r installer; do echo "executing ${installer}." && sh -c "${installer}"; done
 elif test "$(command -v apt)"; then
-    mkdir -p ~/Cellar/opt ~/Cellar/share
-    find . -name install-apt.sh | while read -r installer; do echo "executing ${installer}." && sh -c "${installer}"; done
+  mkdir -p ~/Cellar/opt ~/Cellar/share
+  find . -name install-apt.sh | while read -r installer; do echo "executing ${installer}." && sh -c "${installer}"; done
 fi
