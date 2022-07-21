@@ -7,28 +7,28 @@ DOTFILES_ROOT=$(pwd -P)
 
 set -e
 
-# 提示信息
 info() {
   printf "\r  [ \033[00;34mINFO\033[0m ] %b\n" "$1"
 }
 
-# 交互式提示信息
+warning() {
+  printf "\r  [ \033[00;91mWARN\033[0m ] %b\n" "$1"
+}
+
 user() {
   printf "\r  [ \033[0;33mUSER\033[0m ] %b\n" "$1"
 }
 
-# 成功
 success() {
   printf "\r\033[2K  [ \033[00;32mSUCC\033[0m ] %b\n" "$1"
 }
 
-# 失败
 fail() {
-  printf "\r\033[2K  [\033[0;31mFAIL\033[0m] %b\n" "$1"
+  printf "\r\033[2K  [ \033[0;31mFAIL\033[0m ] %b\n" "$1"
+  echo ''
   exit 255
 }
 
-# 不同用户的设置不一样
 setup_gitconfig() {
   if ! [ -f git/gitconfig.local.symlink ]; then
     info '› setup gitconfig'
@@ -136,7 +136,7 @@ setup_dotfiles() {
   rm tmp
 }
 
-setup_proj() {
+setup_project() {
   info "› link this project to ${HOME}/.dotfiles"
 
   local overwrite_all="false" backup_all="false" skip_all="false"
@@ -152,14 +152,12 @@ brewable() {
     if source p/brewable | while read -r data; do info "$data"; done; then
       success "dependencies installed"
     else
-      fail "error installing dependencies"
+      fail "› error installing dependencies"
     fi
-  else
-    info "$(uname -s) not support now"
   fi
 }
 
-install_dep() {
+install() {
   info "› installing dependencies"
   http_proxy=${http_proxy:-}
   https_proxy=${https_proxy:-}
@@ -169,15 +167,18 @@ install_dep() {
   elif [ -n "${https_proxy}" ] && [ -n "${http_proxy}" ] || [ -n "${all_proxy}" ]; then
     # 只有在设置代理的时候才更新brew和安装工具
     brewable
+    # Install software
+    info "› exec $DOTFILES/p/install"
+    "$DOTFILES"/p/install
   else
-    info "no proxy, skip installing or updating brew"
+    warning "› no proxy, skip installing or updating brew"
   fi
 }
 
 [ -n "$CI" ] || setup_gitconfig # skip set personal config in ci
-setup_proj
+setup_project
 setup_dotfiles
-install_dep
+install
 
 echo ''
 echo '› All installed!'
