@@ -68,7 +68,3 @@ function doBundle() {
 
 updateBrew
 doBundle
-
-# Install software
-echo "› exec $DOTFILES/p/install"
-"$DOTFILES"/p/install
